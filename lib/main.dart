@@ -5,22 +5,41 @@ import './resposta.dart';
 void main() => runApp(PerguntaApp());
 
 class PerguntaAppState extends State<PerguntaApp> {
-  var perguntaSelecionada = 0;
-  var opcao = 0;
+  var _perguntaSelecionada = 0;
 
   void _responder() {
     setState(() {
-      if (perguntaSelecionada < 1) {
-        perguntaSelecionada++;
-        opcao++;
+      if (_perguntaSelecionada < 2) {
+        _perguntaSelecionada++;
       }
     });
     print('Resposta aceita');
+    print(_perguntaSelecionada);
   }
 
   @override
   Widget build(BuildContext context) {
-    final perguntas = ['Qual sua cor favorita?', 'Qual é seu animal favorito?'];
+    final perguntas = [
+      {
+        'texto': 'Qual sua cor favorita?',
+        'respostas': ['Azul', 'Verde', 'Amarelo', 'Branco'],
+      },
+      {
+        'texto': 'Qual é sua tecnologia favorita?',
+        'respostas': ['Vue.js', 'React.js', 'C#', 'Flutter'],
+      },
+      {
+        'texto': 'Qual é seu animal favorito?',
+        'respostas': ['Arara', 'Gato', 'Cachorro', 'Peixe'],
+      },
+    ];
+
+    List<String> respostas =
+        perguntas[_perguntaSelecionada].cast()['respostas'];
+
+    List<Widget> widgets =
+        respostas.map((text) => Respostas(text, _responder)).toList();
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -28,10 +47,8 @@ class PerguntaAppState extends State<PerguntaApp> {
         ),
         body: Column(
           children: [
-            Questao(perguntas[perguntaSelecionada]),
-            Respostas('Resposta 1', _responder),
-            Respostas('Resposta 2', _responder),
-            Respostas('Resposta 3', _responder),
+            Questao(perguntas[_perguntaSelecionada]['texto'].toString()),
+            ...widgets,
           ],
         ),
       ),
