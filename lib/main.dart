@@ -6,29 +6,52 @@ void main() => runApp(PerguntaApp());
 
 class PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
 
   final _perguntas = const [
     {
       'texto': 'Qual sua cor favorita?',
-      'respostas': ['Azul', 'Verde', 'Amarelo', 'Branco'],
+      'respostas': [
+        {'texto': 'Azul', 'pontuacao': 7},
+        {'texto': 'Verde', 'pontuacao': 9},
+        {'texto': 'Amarelo', 'pontuacao': 6},
+        {'texto': 'Branco', 'pontuacao': 5},
+      ],
     },
     {
       'texto': 'Qual é sua tecnologia favorita?',
-      'respostas': ['Vue.js', 'React.js', 'C#', 'Flutter'],
+      'respostas': [
+        {'texto': 'Vue.js', 'pontuacao': 10},
+        {'texto': 'React.js', 'pontuacao': 7},
+        {'texto': 'C#', 'pontuacao': 8},
+        {'texto': 'Flutter', 'pontuacao': 6},
+      ],
     },
     {
       'texto': 'Qual é seu animal favorito?',
-      'respostas': ['Arara', 'Gato', 'Cachorro', 'Peixe'],
+      'respostas': [
+        {'texto': 'Arara', 'pontuacao': 2},
+        {'texto': 'Gato', 'pontuacao': 10},
+        {'texto': 'Cachorro', 'pontuacao': 6},
+        {'texto': 'Peixe', 'pontuacao': 5},
+      ],
     },
   ];
 
-  void _responder() {
-    setState(() {
-      if (perguntaSelecionada) {
+  void _responder(int pontuacao) {
+    if (perguntaSelecionada) {
+      setState(() {
         _perguntaSelecionada++;
-      }
+        _pontuacaoTotal += pontuacao;
+      });
+    }
+  }
+
+  void _reiniciar() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
     });
-    print(_perguntaSelecionada);
   }
 
   bool get perguntaSelecionada {
@@ -47,7 +70,7 @@ class PerguntaAppState extends State<PerguntaApp> {
                   perguntas: _perguntas,
                   perguntaSelecionada: _perguntaSelecionada,
                   responder: _responder)
-              : const Resultado()),
+              : Resultado(_pontuacaoTotal, _reiniciar)),
     );
   }
 }
